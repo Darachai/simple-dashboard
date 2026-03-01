@@ -58,6 +58,10 @@ filtered_data["GPA Level"] = filtered_data["GPA"].apply(categorize_gpa)
 
 st.divider()
 # KPI Section
+st.subheader("Summary Statistics")
+
+summary = filtered_data[["GPA"]].describe()
+st.dataframe(summary)
 
 col_kpi1, col_kpi2 = st.columns(2)
 
