@@ -70,6 +70,7 @@ st.subheader("Department Distribution")
 
 dept_count = filtered_data["Department"].value_counts().reset_index()
 dept_count.columns = ["Department", "Count"]
+dept_count = dept_count.sort_values("Count", ascending=False)
 
 fig3 = px.bar(
     dept_count,
