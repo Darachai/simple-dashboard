@@ -41,14 +41,19 @@ filtered_data = filtered_data[
 
 # Graph 1: GPA Distribution
 st.subheader("GPA Distribution")
-fig1 = px.histogram(filtered_data, x="GPA", nbins=15)
-st.plotly_chart(fig1)
-
+fig1 = px.histogram(
+    filtered_data,
+    x="GPA",
+    nbins=15,
+    color_discrete_sequence=["#4F8BF9"]
+)
 # Graph 2: Gender Count
 st.subheader("Gender Distribution")
-fig2 = px.pie(filtered_data, names="Gender")
-st.plotly_chart(fig2)
-
+fig2 = px.pie(
+    filtered_data,
+    names="Gender",
+    color_discrete_sequence=["#4F8BF9", "#FF6B6B"]
+)
 # Graph 3: Department Count
 st.subheader("Department Distribution")
 
@@ -66,7 +71,8 @@ filtered_data = filtered_data[filtered_data["Department"].isin(dept_selected)]
 fig3 = px.bar(
     dept_count,
     x="Department",
-    y="Count"
+    y="Count",
+    color_discrete_sequence=["#6BCB77"]
 )
 
 st.plotly_chart(fig3)
