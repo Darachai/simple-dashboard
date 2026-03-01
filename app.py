@@ -108,7 +108,7 @@ fig_gpa_level = px.bar(
 
 st.plotly_chart(fig_gpa_level, use_container_width=True)
 
-st.subheader("GPA Distribution")
+st.markdown("## 📈 GPA Distribution")
 fig1.update_traces(
     hovertemplate="GPA: %{x}<br>Count: %{y}"
 )
