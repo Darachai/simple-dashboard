@@ -3,7 +3,11 @@ import pandas as pd
 import plotly.express as px
 import numpy as np
 
-st.set_page_config(page_title="Student Dashboard", layout="wide")
+st.set_page_config(
+    page_title="Student Performance Dashboard",
+    page_icon="📊",
+    layout="wide"
+)
 
 st.title("Student Performance Dashboard")
 st.write("Dashboard version 1.2")
