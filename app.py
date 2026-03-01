@@ -40,7 +40,7 @@ with st.sidebar:
         default=data["Department"].unique()
     )
 
-
+st.divider()
 # KPI Section
 
 col_kpi1, col_kpi2 = st.columns(2)
@@ -50,6 +50,7 @@ with col_kpi1:
 
 with col_kpi2:
     st.metric("Average GPA", round(filtered_data["GPA"].mean(), 2))
+st.divider()
 
 # Charts
 
