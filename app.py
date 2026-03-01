@@ -80,6 +80,17 @@ st.plotly_chart(gauge, use_container_width=True)
 if st.checkbox("Show Raw Data"):
     st.dataframe(filtered_data)
 # Charts
+gpa_level_count = filtered_data["GPA Level"].value_counts().reset_index()
+gpa_level_count.columns = ["Level", "Count"]
+
+fig_gpa_level = px.bar(
+    gpa_level_count,
+    x="Level",
+    y="Count",
+    color_discrete_sequence=["#FFA500"]
+)
+
+st.plotly_chart(fig_gpa_level, use_container_width=True)
 
 st.subheader("GPA Distribution")
 fig1.update_traces(
