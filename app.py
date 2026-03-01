@@ -50,7 +50,23 @@ with col_kpi1:
 
 with col_kpi2:
     st.metric("Average GPA", round(filtered_data["GPA"].mean(), 2))
+
 st.divider()
+import plotly.graph_objects as go
+
+avg_gpa = round(filtered_data["GPA"].mean(), 2)
+
+gauge = go.Figure(go.Indicator(
+    mode="gauge+number",
+    value=avg_gpa,
+    title={'text': "Average GPA"},
+    gauge={
+        'axis': {'range': [0, 4]},
+        'bar': {'color': "#4F8BF9"}
+    }
+))
+
+st.plotly_chart(gauge, use_container_width=True)
 
 # Charts
 
