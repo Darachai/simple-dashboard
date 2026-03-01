@@ -29,6 +29,15 @@ data = pd.DataFrame({
 year_selected = st.selectbox("Select Year", sorted(data["Year"].unique()))
 
 filtered_data = data[data["Year"] == year_selected]
+dept_selected = st.multiselect(
+    "Select Department",
+    data["Department"].unique(),
+    default=data["Department"].unique()
+)
+
+filtered_data = filtered_data[
+    filtered_data["Department"].isin(dept_selected)
+]
 
 # Graph 1: GPA Distribution
 st.subheader("GPA Distribution")
