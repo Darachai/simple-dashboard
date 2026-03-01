@@ -76,3 +76,4 @@ fig3 = px.bar(
 )
 
 st.plotly_chart(fig3)
+st.caption("This chart shows the GPA distribution for the selected year.")
