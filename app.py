@@ -55,11 +55,8 @@ st.divider()
 # Charts
 
 st.subheader("GPA Distribution")
-fig1 = px.histogram(
-    filtered_data,
-    x="GPA",
-    nbins=15,
-    color_discrete_sequence=["#4F8BF9"]
+fig1.update_traces(
+    hovertemplate="GPA: %{x}<br>Count: %{y}"
 )
 
 st.subheader("Gender Distribution")
