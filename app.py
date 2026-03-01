@@ -10,6 +10,7 @@ st.set_page_config(
 )
 
 st.title("Student Performance Dashboard")
+st.image("gojo.png", caption="มหาเวทผนึกมาร", use_container_width=True)
 st.write("Dashboard version 1.2")
 
 with st.spinner("Loading dashboard..."):
@@ -155,6 +156,8 @@ with col2:
     st.plotly_chart(fig2, use_container_width=True)
 
 st.plotly_chart(fig3, use_container_width=True)
+with st.expander("View Special Image"):
+    st.image("gojo.png", caption="มหาเวทผนึกมาร", use_container_width=True)
 
 st.caption("This dashboard visualizes student performance based on selected filters.")
 st.divider()
