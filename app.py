@@ -88,6 +88,18 @@ dept_count = filtered_data["Department"].value_counts().reset_index()
 dept_count.columns = ["Department", "Count"]
 dept_count = dept_count.sort_values("Count", ascending=False)
 
+gender_count = filtered_data["Gender"].value_counts().reset_index()
+gender_count.columns = ["Gender", "Count"]
+
+fig_gender_bar = px.bar(
+    gender_count,
+    x="Gender",
+    y="Count",
+    color_discrete_sequence=["#FF6B6B"]
+)
+
+st.plotly_chart(fig_gender_bar, use_container_width=True)
+
 fig3 = px.bar(
     dept_count,
     x="Department",
