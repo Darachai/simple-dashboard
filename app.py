@@ -68,6 +68,8 @@ gauge = go.Figure(go.Indicator(
 
 st.plotly_chart(gauge, use_container_width=True)
 
+if st.checkbox("Show Raw Data"):
+    st.dataframe(filtered_data)
 # Charts
 
 st.subheader("GPA Distribution")
