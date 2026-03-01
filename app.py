@@ -39,6 +39,15 @@ with st.sidebar:
         data["Department"].unique(),
         default=data["Department"].unique()
     )
+def categorize_gpa(gpa):
+    if gpa < 2.5:
+        return "Low"
+    elif gpa < 3.25:
+        return "Medium"
+    else:
+        return "High"
+
+filtered_data["GPA Level"] = filtered_data["GPA"].apply(categorize_gpa)    
 
 st.divider()
 # KPI Section
