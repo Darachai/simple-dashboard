@@ -1,22 +1,59 @@
 import streamlit as st
 import pandas as pd
 import plotly.express as px
+import plotly.graph_objects as go
 import numpy as np
+import base64
 
+# ---------------- PAGE CONFIG ----------------
 st.set_page_config(
     page_title="Student Performance Dashboard",
     page_icon="📊",
     layout="wide"
 )
 
-st.title("Student Performance Dashboard")
-st.image("gojo.png", caption="มหาเวทผนึกมาร", use_container_width=True)
-st.write("Dashboard version 1.2")
+# ---------------- LOAD IMAGE FUNCTION ----------------
+def get_base64(file_path):
+    with open(file_path, "rb") as f:
+        return base64.b64encode(f.read()).decode()
 
-with st.spinner("Loading dashboard..."):
-    st.success("Dashboard loaded successfully!")
-# Generate Sample Data
+img1 = get_base64("images.jpg")
+img2 = get_base64("who-wins-heian-sukuna-or-four-arms-v0-8u28q2n56gle1.webp")
 
+# ---------------- CINEMATIC IMAGE SECTION ----------------
+st.markdown(f"""
+<style>
+.cinema-container {{
+    display: flex;
+    gap: 40px;
+    margin-bottom: 40px;
+}}
+
+.cinema-img {{
+    width: 100%;
+    border-radius: 25px;
+    box-shadow: 0px 20px 60px rgba(0,0,0,0.8);
+    transition: transform 0.4s ease, box-shadow 0.4s ease;
+}}
+
+.cinema-img:hover {{
+    transform: scale(1.05);
+    box-shadow: 0px 30px 80px rgba(0,0,0,1);
+}}
+</style>
+
+<h1>🎓 Student Performance Dashboard</h1>
+<p style="color:gray;">Dashboard version 6.0 - Cinematic Edition</p>
+
+<div class="cinema-container">
+    <img class="cinema-img" src="data:image/jpg;base64,{img1}">
+    <img class="cinema-img" src="data:image/webp;base64,{img2}">
+</div>
+""", unsafe_allow_html=True)
+
+st.divider()
+
+# ---------------- GENERATE DATA ----------------
 np.random.seed(42)
 data = pd.DataFrame({
     "Year": np.random.choice([1, 2, 3, 4], 200),
@@ -24,34 +61,32 @@ data = pd.DataFrame({
     "GPA": np.random.normal(3.0, 0.4, 200),
     "Department": np.random.choice(["AI", "IT", "CS"], 200)
 })
-csv = filtered_data.to_csv(index=False).encode("utf-8")
 
-st.download_button(
-    label="Download Filtered Data as CSV",
-    data=csv,
-    file_name="filtered_students.csv",
-    mime="text/csv"
-)
-
-# Filters
-
-year_selected = st.selectbox("Select Year", sorted(data["Year"].unique()))
-
-dept_selected = st.multiselect(
-    "Select Department",
-    data["Department"].unique(),
-    default=data["Department"].unique()
-)
-
+# ---------------- SIDEBAR FILTERS ----------------
 with st.sidebar:
     st.header("Filters")
-    year_selected = st.selectbox("Select Year", sorted(data["Year"].unique()))
+
+    year_selected = st.selectbox(
+        "Select Year",
+        sorted(data["Year"].unique())
+    )
 
     dept_selected = st.multiselect(
         "Select Department",
         data["Department"].unique(),
         default=data["Department"].unique()
     )
+
+    if st.button("Reset Filters"):
+        st.rerun()
+
+# ---------------- FILTER DATA ----------------
+filtered_data = data[
+    (data["Year"] == year_selected) &
+    (data["Department"].isin(dept_selected))
+].copy()
+
+# ---------------- GPA CATEGORY ----------------
 def categorize_gpa(gpa):
     if gpa < 2.5:
         return "Low"
@@ -60,26 +95,20 @@ def categorize_gpa(gpa):
     else:
         return "High"
 
-filtered_data["GPA Level"] = filtered_data["GPA"].apply(categorize_gpa)    
+filtered_data["GPA Level"] = filtered_data["GPA"].apply(categorize_gpa)
 
-st.divider()
-# KPI Section
-st.subheader("Summary Statistics")
+# ---------------- KPI SECTION ----------------
+st.subheader("📊 Summary Statistics")
 
-summary = filtered_data[["GPA"]].describe()
-st.dataframe(summary)
+col1, col2 = st.columns(2)
 
-col_kpi1, col_kpi2 = st.columns(2)
-
-with col_kpi1:
+with col1:
     st.metric("Total Students", len(filtered_data))
 
-with col_kpi2:
+with col2:
     st.metric("Average GPA", round(filtered_data["GPA"].mean(), 2))
 
-st.divider()
-import plotly.graph_objects as go
-
+# ---------------- GAUGE ----------------
 avg_gpa = round(filtered_data["GPA"].mean(), 2)
 
 gauge = go.Figure(go.Indicator(
@@ -94,71 +123,43 @@ gauge = go.Figure(go.Indicator(
 
 st.plotly_chart(gauge, use_container_width=True)
 
-if st.checkbox("Show Raw Data"):
-    st.dataframe(filtered_data)
-# Charts
+# ---------------- SUMMARY TABLE ----------------
+summary = filtered_data[["GPA"]].describe()
+st.dataframe(summary)
+
+# ---------------- DOWNLOAD CSV ----------------
+csv = filtered_data.to_csv(index=False).encode("utf-8")
+st.download_button(
+    label="Download Filtered Data as CSV",
+    data=csv,
+    file_name="filtered_students.csv",
+    mime="text/csv"
+)
+
+st.divider()
+
+# ---------------- CHARTS ----------------
+st.markdown("## 📈 GPA Distribution")
+fig1 = px.histogram(filtered_data, x="GPA", nbins=15)
+st.plotly_chart(fig1, use_container_width=True)
+
+st.markdown("## 👥 Gender Distribution")
+fig2 = px.pie(filtered_data, names="Gender")
+st.plotly_chart(fig2, use_container_width=True)
+
+st.markdown("## 🏫 Department Distribution")
+dept_count = filtered_data["Department"].value_counts().reset_index()
+dept_count.columns = ["Department", "Count"]
+
+fig3 = px.bar(dept_count, x="Department", y="Count")
+st.plotly_chart(fig3, use_container_width=True)
+
+st.markdown("## 📊 GPA Level Distribution")
 gpa_level_count = filtered_data["GPA Level"].value_counts().reset_index()
 gpa_level_count.columns = ["Level", "Count"]
 
-fig_gpa_level = px.bar(
-    gpa_level_count,
-    x="Level",
-    y="Count",
-    color_discrete_sequence=["#FFA500"]
-)
+fig4 = px.bar(gpa_level_count, x="Level", y="Count")
+st.plotly_chart(fig4, use_container_width=True)
 
-st.plotly_chart(fig_gpa_level, use_container_width=True)
-
-st.markdown("## 📈 GPA Distribution")
-fig1.update_traces(
-    hovertemplate="GPA: %{x}<br>Count: %{y}"
-)
-
-st.subheader("Gender Distribution")
-fig2 = px.pie(
-    filtered_data,
-    names="Gender",
-    color_discrete_sequence=["#4F8BF9", "#FF6B6B"]
-)
-
-st.subheader("Department Distribution")
-
-dept_count = filtered_data["Department"].value_counts().reset_index()
-dept_count.columns = ["Department", "Count"]
-dept_count = dept_count.sort_values("Count", ascending=False)
-
-gender_count = filtered_data["Gender"].value_counts().reset_index()
-gender_count.columns = ["Gender", "Count"]
-
-fig_gender_bar = px.bar(
-    gender_count,
-    x="Gender",
-    y="Count",
-    color_discrete_sequence=["#FF6B6B"]
-)
-
-st.plotly_chart(fig_gender_bar, use_container_width=True)
-
-fig3 = px.bar(
-    dept_count,
-    x="Department",
-    y="Count",
-    color_discrete_sequence=["#6BCB77"]
-)
-
-# Layout
-col1, col2 = st.columns(2)
-
-with col1:
-    st.plotly_chart(fig1, use_container_width=True)
-
-with col2:
-    st.plotly_chart(fig2, use_container_width=True)
-
-st.plotly_chart(fig3, use_container_width=True)
-with st.expander("View Special Image"):
-    st.image("gojo.png", caption="มหาเวทผนึกมาร", use_container_width=True)
-
-st.caption("This dashboard visualizes student performance based on selected filters.")
 st.divider()
 st.markdown("© 2025 Student Performance Dashboard | Developed with Streamlit")
