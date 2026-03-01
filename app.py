@@ -4,11 +4,10 @@ import plotly.express as px
 import numpy as np
 
 st.title("Student Performance Dashboard")
-st.metric("Total Students", len(filtered_data))
-st.metric("Average GPA", round(filtered_data["GPA"].mean(), 2))
-col1, col2 = st.columns(2)
 
 st.write("Dashboard version 1.1")
+# KPI Section
+col1, col2 = st.columns(2)
 
 with col1:
     st.plotly_chart(fig1)
@@ -17,7 +16,6 @@ with col2:
     st.plotly_chart(fig2)
 
 st.plotly_chart(fig3)
-
 # สร้างข้อมูลตัวอย่าง
 np.random.seed(42)
 data = pd.DataFrame({
