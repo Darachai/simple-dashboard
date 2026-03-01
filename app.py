@@ -91,3 +91,5 @@ with col2:
 st.plotly_chart(fig3, use_container_width=True)
 
 st.caption("This dashboard visualizes student performance based on selected filters.")
+st.divider()
+st.markdown("© 2025 Student Performance Dashboard | Developed with Streamlit")
