@@ -8,6 +8,8 @@ st.metric("Total Students", len(filtered_data))
 st.metric("Average GPA", round(filtered_data["GPA"].mean(), 2))
 col1, col2 = st.columns(2)
 
+st.write("Dashboard version 1.1")
+
 with col1:
     st.plotly_chart(fig1)
 
