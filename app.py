@@ -18,7 +18,14 @@ data = pd.DataFrame({
     "GPA": np.random.normal(3.0, 0.4, 200),
     "Department": np.random.choice(["AI", "IT", "CS"], 200)
 })
+csv = filtered_data.to_csv(index=False).encode("utf-8")
 
+st.download_button(
+    label="Download Filtered Data as CSV",
+    data=csv,
+    file_name="filtered_students.csv",
+    mime="text/csv"
+)
 
 # Filters
 
