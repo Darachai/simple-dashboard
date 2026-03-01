@@ -12,7 +12,8 @@ st.set_page_config(
 st.title("Student Performance Dashboard")
 st.write("Dashboard version 1.2")
 
-
+with st.spinner("Loading dashboard..."):
+    st.success("Dashboard loaded successfully!")
 # Generate Sample Data
 
 np.random.seed(42)
