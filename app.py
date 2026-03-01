@@ -28,7 +28,7 @@ data = pd.DataFrame({
 # Interactive filter
 year_selected = st.selectbox("Select Year", sorted(data["Year"].unique()))
 
-filtered_data = data[data["Year"] == year_selected]
+filtered_data = filter_data(data, year_selected, dept_selected)
 dept_selected = st.multiselect(
     "Select Department",
     data["Department"].unique(),
