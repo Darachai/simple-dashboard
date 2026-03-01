@@ -30,10 +30,15 @@ dept_selected = st.multiselect(
     default=data["Department"].unique()
 )
 
-filtered_data = data[
-    (data["Year"] == year_selected) &
-    (data["Department"].isin(dept_selected))
-]
+with st.sidebar:
+    st.header("Filters")
+    year_selected = st.selectbox("Select Year", sorted(data["Year"].unique()))
+
+    dept_selected = st.multiselect(
+        "Select Department",
+        data["Department"].unique(),
+        default=data["Department"].unique()
+    )
 
 
 # KPI Section
